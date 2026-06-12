@@ -310,26 +310,38 @@ export default function StandardsPage() {
                 </p>
               </div>
 
-<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-  <div>
-    <h1 className="text-2xl font-semibold text-slate-100">
-      Standards
-    </h1>
-    <p className="text-sm text-slate-400">
-      Current SAR K9 standards and evaluation documents.
-    </p>
-  </div>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h1 className="text-2xl font-semibold text-slate-100">
+                    Standards
+                  </h1>
+                  <p className="text-sm text-slate-400">
+                    Current SAR K9 standards and evaluation documents.
+                  </p>
+                </div>
 
-  <button
-    type="button"
-    onClick={() =>
-      window.open("/api/standards/print/standards-booklet", "_blank")
-    }
-    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
-  >
-    Print / Download Standards Booklet
-  </button>
-</div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.open("/api/standards/print/standards-booklet", "_blank")
+                    }
+                    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
+                  >
+                    Print / Download FORMAL STANDARDS Booklet
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.open("/api/standards/print/standards-summary-booklet", "_blank")
+                    }
+                    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
+                  >
+                    Print / Download Standard SUMMARIES ONLY Booklet
+                  </button>
+                </div>
+              </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {allDisciplineLabels.map((label) => {
@@ -447,7 +459,7 @@ export default function StandardsPage() {
 
                     <div className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                       <div className="text-xs text-amber-300 uppercase tracking-wider">Summary only - use view/print for full standard text</div>
-                      
+
                       <div className="mt-3 w-full overflow-x-auto">
                         {selected.summary_md ? (
                           <div className="prose prose-invert max-w-none text-sm">
