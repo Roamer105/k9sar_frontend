@@ -310,6 +310,27 @@ export default function StandardsPage() {
                 </p>
               </div>
 
+<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+  <div>
+    <h1 className="text-2xl font-semibold text-slate-100">
+      Standards
+    </h1>
+    <p className="text-sm text-slate-400">
+      Current SAR K9 standards and evaluation documents.
+    </p>
+  </div>
+
+  <button
+    type="button"
+    onClick={() =>
+      window.open("/api/standards/print/standards-booklet", "_blank")
+    }
+    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
+  >
+    Print / Download Standards Booklet
+  </button>
+</div>
+
               <div className="mt-4 flex flex-wrap gap-2">
                 {allDisciplineLabels.map((label) => {
                   const active = selectedDisciplines.includes(label);
