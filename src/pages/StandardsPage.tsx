@@ -328,7 +328,7 @@ export default function StandardsPage() {
                     }
                     className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
                   >
-                    Print / Download FORMAL STANDARDS Booklet
+                    Print FORMAL STANDARDS Booklet
                   </button>
 
                   <button
@@ -338,7 +338,7 @@ export default function StandardsPage() {
                     }
                     className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
                   >
-                    Print / Download Standard SUMMARIES ONLY Booklet
+                    Print SUMMARIES ONLY Booklet
                   </button>
                 </div>
               </div>
