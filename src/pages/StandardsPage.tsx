@@ -320,13 +320,13 @@ export default function StandardsPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex flex-wrap gap-2 justify-end">
                   <button
                     type="button"
                     onClick={() =>
                       window.open("/api/standards/print/standards-booklet", "_blank")
                     }
-                    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
+                    className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
                   >
                     Print FORMAL STANDARDS Booklet
                   </button>
@@ -336,7 +336,7 @@ export default function StandardsPage() {
                     onClick={() =>
                       window.open("/api/standards/print/standards-summary-booklet", "_blank")
                     }
-                    className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
+                    className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 hover:bg-slate-700"
                   >
                     Print SUMMARIES ONLY Booklet
                   </button>
