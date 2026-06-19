@@ -32,6 +32,18 @@ function isPublicPath(pathname: string) {
   return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
+type SupervisorKpis = {
+  pending_affiliations?: number;
+};
+
+type DashboardSettings = {
+  dues_enabled?: string | number | boolean;
+};
+
+type ForumSummary = {
+  unread_count?: number;
+};
+
 export function useAuthRevalidation() {
   useEffect(() => {
     let running = false;
@@ -82,7 +94,7 @@ export default function AppLayout() {
   const [supervisor, setSupervisor] = useState(false);
   const [administrator, setAdministrator] = useState(false);
   const [privileged, setPrivileged] = useState(false);
-  const [dues_enabled, setdues_enabled] = useState(false);
+  const [duesEnabled, setDuesEnabled] = useState(false);
 
   // ✅ THIS MUST EXIST (your error says it doesn't)
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -193,47 +205,54 @@ export default function AppLayout() {
 
 
 
-  const [forumSummary, setForumSummary] = useState(null);
+  const [forumSummary, setForumSummary] = useState<ForumSummary | null>(null);
   const [affiliationRequestCount, setAffiliationRequestCount] = useState(0);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     if (!token || !privileged) {
       setAffiliationRequestCount(0);
-      return;
+      setDuesEnabled(false);
+      return () => controller.abort();
     }
 
-    apiJson("/supervisor/kpis")
-    apiJson("/supervisor/kpis")
-      .then((r) => r.json())
-      .then((data) => {
-        setAffiliationRequestCount(data?.pending_affiliations ?? 0);
-      })
-      .catch(() => {
-        setAffiliationRequestCount(0);
-      });
+    (async () => {
+      const [kpis, settings] = await Promise.all([
+        apiJson<SupervisorKpis>("/supervisor/kpis", { signal: controller.signal }).catch(() => null),
+        apiJson<DashboardSettings>("/dashboard/settings", { signal: controller.signal }).catch(() => null),
+      ]);
 
-    apiJson("/dashboard/settings")
-      .then((r) => r.json())
-      .then((data) => {
-        setdues_enabled(
-          String(data?.dues_enabled ?? "0") === "1"
-        );
-      })
-      .catch(() => {
-        setdues_enabled(false);
-      });
+      if (controller.signal.aborted) return;
 
+      setAffiliationRequestCount(kpis?.pending_affiliations ?? 0);
+      setDuesEnabled(String(settings?.dues_enabled ?? "0") === "1");
+    })();
+
+    return () => controller.abort();
   }, [token, privileged]);
 
   useEffect(() => {
-    if (!token) return;
+    const controller = new AbortController();
 
-    apiJson("/forums/activity/summary", {
+    if (!token) {
+      setForumSummary(null);
+      return () => controller.abort();
+    }
+
+    apiJson<ForumSummary>("/forums/activity/summary", {
       authRequired: true,
       redirectOnAuthFailure: false,
+      signal: controller.signal,
     })
-      .then(setForumSummary)
-      .catch(() => { });
+      .then((summary) => {
+        if (!controller.signal.aborted) setForumSummary(summary);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setForumSummary(null);
+      });
+
+    return () => controller.abort();
   }, [token]);
 
   // Close mobile nav on route change
@@ -428,7 +447,7 @@ export default function AppLayout() {
                         <NavLink to="/admin/email-users" className={({ isActive }) => linkClass(isActive)}>
                           Email Selected Members
                         </NavLink>
-                        {dues_enabled && (
+                        {duesEnabled && (
                           <NavLink to="/admin/dues" className={({ isActive }) => linkClass(isActive)}>
                             Membership Dues
                           </NavLink>
@@ -590,7 +609,7 @@ export default function AppLayout() {
                           <NavLink to="/admin/email-users" className={({ isActive }) => linkClass(isActive)}>
                             Email Selected Members
                           </NavLink>
-                          {dues_enabled && (
+                          {duesEnabled && (
                             <NavLink to="/admin/dues" className={({ isActive }) => linkClass(isActive)}>
                               Membership Dues
                             </NavLink>
